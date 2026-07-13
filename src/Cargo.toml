@@ -1,0 +1,21 @@
+[package]
+name = "src"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "main"
+path = "main.rs"
+
+[dependencies]
+reth-network       = { git = "https://github.com/paradigmxyz/reth", tag = "v2.3.0" }
+reth-network-peers = { git = "https://github.com/paradigmxyz/reth", tag = "v2.3.0" }
+reth-storage-api    = { git = "https://github.com/paradigmxyz/reth", tag = "v2.3.0" }
+reth-tasks          = { git = "https://github.com/paradigmxyz/reth", tag = "v2.3.0" }
+reth-transaction-pool          = { git = "https://github.com/paradigmxyz/reth", tag = "v2.3.0", features = ["test-utils"]  }
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+tokio    = { version = "1", features = ["full"] }
+futures  = "0.3"
+anyhow   = "1"
+alloy-primitives = "1.6.0"
+alloy-consensus = "2.1.1"
