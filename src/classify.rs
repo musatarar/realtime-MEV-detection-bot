@@ -1,9 +1,9 @@
-use crate::types::{ClassifiedTx, TxKind};
+use crate::types::{ClassifiedTx, TxCategory};
 use alloy_primitives::{Address, Bytes};
 use reth_transaction_pool::{test_utils:: MockTransaction, NewTransactionEvent};
 use alloy_sol_types::{sol, SolCall};
 
-pub fn classify(event: &NewTransactionEvent<MockTransaction>) -> () {
+pub fn classify(event: &NewTransactionEvent<MockTransaction>) -> anyhow::Result<ClassifiedTx> {
     let tx: &std::sync::Arc<reth_transaction_pool::ValidPoolTransaction<MockTransaction>> = &event.transaction;
 
     let nonce: u64 = tx.nonce();
@@ -21,7 +21,7 @@ pub fn classify(event: &NewTransactionEvent<MockTransaction>) -> () {
 
     let cost: alloy_primitives::Uint<256, 4> = *tx.cost(); 
 
-    let kind: TxKind = decode_input(&input.clone(), to.clone());
+    let kind: TxCategory = decode_input(&input.clone(), to.clone());
 
     let c: ClassifiedTx = ClassifiedTx {
         nonce,
@@ -36,8 +36,8 @@ pub fn classify(event: &NewTransactionEvent<MockTransaction>) -> () {
         cost,
         kind
     };
-    let debug_str: String = format!("{:?}", c);
-    println!("{}", debug_str);
+
+    Ok(c)
 }
 
 sol! {
@@ -51,9 +51,9 @@ sol! {
     ) returns (uint256[] amounts);
 }
 
-pub fn decode_input(input: &Bytes, tx_to: Option<Address>) -> TxKind {
+pub fn decode_input(input: &Bytes, tx_to: Option<Address>) -> TxCategory {
     if input.len() < 4 {
-        return TxKind::Other;
+        return TxCategory::Other;
     }
 
     let selector: [u8; 4] = input[0..4].try_into().unwrap();
@@ -61,19 +61,19 @@ pub fn decode_input(input: &Bytes, tx_to: Option<Address>) -> TxKind {
     match selector {
         transferCall::SELECTOR => {
             let Ok(decoded) = transferCall::abi_decode(input) else {
-                return TxKind::Other;
+                return TxCategory::Other;
             };
             let Some(token) = tx_to else {
-                return TxKind::Other;
+                return TxCategory::Other;
             };
-            TxKind::Erc20Transfer { token, to: decoded.to, amount: decoded.amount }
+            TxCategory::Erc20Transfer { token, to: decoded.to, amount: decoded.amount }
         }
         swapExactTokensForTokensCall::SELECTOR => {
             let Ok(decoded) = swapExactTokensForTokensCall::abi_decode(input) else {
-                return TxKind::Other
+                return TxCategory::Other
             };
-            TxKind::UniV2Swap { path: decoded.path, amount_in: decoded.amountIn, min_out: decoded.amountOutMin }
+            TxCategory::UniV2Swap { path: decoded.path, amount_in: decoded.amountIn, min_out: decoded.amountOutMin }
         }
-        _ => TxKind::Other,
+        _ => TxCategory::Other,
     }
 }

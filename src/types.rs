@@ -12,11 +12,11 @@ pub struct ClassifiedTx {
     pub input: Bytes,
     pub value: U256,
     pub cost: U256,
-    pub kind: TxKind,
+    pub kind: TxCategory,
 }
 
 #[derive(Debug, Clone)]
-pub enum TxKind {
+pub enum TxCategory {
     UniV2Swap { path: Vec<Address>, amount_in: U256, min_out: U256 },
     Erc20Transfer { token: Address, to: Address, amount: U256 },
     Other,
