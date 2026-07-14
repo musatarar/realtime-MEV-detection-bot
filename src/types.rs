@@ -1,10 +1,10 @@
-use alloy_primitives::{Address, bytes::Bytes, TxHash, U256, U128};
+use alloy_primitives::{Address, Bytes, TxHash, U256};
 
 #[derive(Debug, Clone)]
 pub struct ClassifiedTx {
     pub nonce: u64,
-    // pub max_fee_per_gas: U256,
-    // pub max_priority_fee_per_gas: U128,
+    pub max_fee_per_gas: u128,
+    pub max_priority_fee_per_gas: Option<u128>,
     pub gas_limit: u64,
     pub hash: TxHash,
     pub sender: Address,
@@ -12,7 +12,7 @@ pub struct ClassifiedTx {
     pub input: Bytes,
     pub value: U256,
     pub cost: U256,
-    // pub kind: TxKind,
+    pub kind: TxKind,
 }
 
 #[derive(Debug, Clone)]

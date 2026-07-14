@@ -5816,6 +5816,7 @@ version = "0.1.0"
 dependencies = [
  "alloy-consensus",
  "alloy-primitives",
+ "alloy-sol-types",
  "anyhow",
  "futures",
  "reth-network",
