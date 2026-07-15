@@ -6335,6 +6335,7 @@ dependencies = [
  "reth-tasks",
  "reth-transaction-pool",
  "revm 41.0.0",
+ "serde_json",
  "tokio",
  "tracing-subscriber 0.3.23",
 ]
