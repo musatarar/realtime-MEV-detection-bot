@@ -1,11 +1,11 @@
-mod ingest; mod classify; mod types; mod simulate;
+mod ingest; mod classify; mod common; mod simulate;
 
 use tokio::sync::mpsc;
 use tracing_subscriber::EnvFilter;
 
 use std::env;
 
-use crate::types::TxCategory;
+use crate::common::types::TxCategory;
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {

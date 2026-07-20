@@ -1,4 +1,4 @@
-use crate::types::{ClassifiedTx, TxCategory};
+use crate::common::types::{ClassifiedTx, TxCategory};
 use alloy_primitives::{Address, Bytes};
 use reth_transaction_pool::{test_utils:: MockTransaction, NewTransactionEvent};
 use alloy_sol_types::{sol, SolCall};
