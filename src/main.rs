@@ -1,4 +1,4 @@
-mod ingest; mod classify; mod common; mod simulate;
+mod ingest; mod classify; mod common; mod simulate; mod operations;
 
 use tokio::sync::mpsc;
 use tracing_subscriber::EnvFilter;
